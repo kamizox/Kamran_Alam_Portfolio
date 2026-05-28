@@ -68,7 +68,7 @@ const About = () => {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
               <div className="bg-surface p-6 rounded-2xl border border-white/5 hover:border-primary/30 transition-colors">
                 <div className="text-4xl font-syne font-bold text-primary mb-2">
-                  {inView ? <CountUp end={120} duration={2.5} /> : '0'}+
+                  {inView ? <CountUp end={15} duration={2.5} /> : '0'}+
                 </div>
                 <div className="text-gray-400 font-medium">Completed Projects</div>
               </div>

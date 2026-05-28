@@ -22,6 +22,7 @@ const Education = () => {
   ];
 
   const certifications = [
+    "Hands On React JS From Beginner to Expert (Udemy)",
     "NVQF Level 2 – Information Technology (Computer Operator)",
     "Complete HTML & CSS – Responsive Websites (Udemy)",
     "Social Media Graphics Design & Video Editing in Canva (Udemy)",

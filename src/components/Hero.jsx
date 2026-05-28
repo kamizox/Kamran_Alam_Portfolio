@@ -116,7 +116,7 @@ const Hero = () => {
             <a href="#contact" className="bg-primary text-white px-8 py-3 rounded-full font-medium hover:bg-red-600 transition-colors glow-shadow">
               Got a project?
             </a>
-            <a href="/Kamran_Alam_CV.pdf" download className="border border-primary text-primary px-8 py-3 rounded-full font-medium hover:bg-primary hover:text-white transition-colors">
+            <a href="Kamran_Alam_CV.pdf" download="Kamran_Alam_CV.pdf" className="border border-primary text-primary px-8 py-3 rounded-full font-medium hover:bg-primary hover:text-white transition-colors">
               Download CV
             </a>
           </motion.div>
@@ -153,7 +153,7 @@ const Hero = () => {
           <div className="relative w-80 h-80 rounded-full border-2 border-primary/30 p-2 glow-shadow-strong">
             <div className="w-full h-full rounded-full overflow-hidden bg-surface relative flex items-center justify-center">
                {/* TODO: Add your photo to /public/profile.jpg */}
-              <img src="/profile.jpg" alt="Kamran Alam" className="absolute w-full h-full object-cover z-10" onError={(e) => e.target.style.display = 'none'} />
+              <img src="profile.png" alt="Kamran Alam" className="absolute w-full h-full object-contain z-10" onError={(e) => e.target.style.display = 'none'} />
               <div className="text-gray-500 z-0">Photo Here</div>
             </div>
             

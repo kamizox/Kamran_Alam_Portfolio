@@ -1,162 +1,193 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { OrbitControls, ContactShadows, useTexture } from '@react-three/drei';
-import * as THREE from 'three';
+import React, { useRef, useEffect } from 'react';
 
-const skillsList = [
-  { name: 'JavaScript', color: '#f7df1e', logo: 'logos/js.png' },
-  { name: 'React',      color: '#61dafb', logo: 'logos/react.png' },
-  { name: 'Node.js',    color: '#339933', logo: 'logos/nodejs.png' },
-  { name: 'CSS3',       color: '#1572b6', logo: 'logos/css3.png' },
-  { name: 'HTML5',      color: '#e34f26', logo: 'logos/html5.png' },
-  { name: 'MongoDB',    color: '#47a248', logo: 'logos/mongodb.png' },
-  { name: 'PostgreSQL', color: '#336791', logo: 'logos/postgresql.png' },
-  { name: 'Git',        color: '#f05032', logo: 'logos/git.png' },
-  { name: 'Java',       color: '#007396', logo: 'logos/java.png' },
-  { name: 'C++',        color: '#00599c', logo: 'logos/cpp.png' },
+const skills = [
+  { name: 'JavaScript', color: '#d4af37', text: 'JS' },
+  { name: 'React',      color: '#61dafb', text: 'Rect' },
+  { name: 'Node.js',    color: '#339933', text: 'Nodjs' },
+  { name: 'CSS3',       color: '#1572b6', text: 'CSS' },
+  { name: 'HTML5',      color: '#e34f26', text: 'HTML' },
+  { name: 'MongoDB',    color: '#47a248', text: 'Mongo' },
+  { name: 'PostgreSQL', color: '#336791', text: 'PostG' },
+  { name: 'Git',        color: '#f05032', text: 'Git' },
+  { name: 'Java',       color: '#007396', text: 'Java' },
+  { name: 'C++',        color: '#00599c', text: 'C++' },
+  { name: 'TypeScript', color: '#3178c6', text: 'TS' },
+  { name: 'Python',     color: '#1e466e', text: 'Py' },
 ];
 
-// Single Sphere — useTexture handles base path automatically
-const Sphere = ({ initialPosition, skill, size = 0.55 }) => {
-  const meshRef = useRef();
-  const [hovered, setHovered] = useState(false);
-  const { viewport, mouse } = useThree();
-
-  // useTexture respects Vite's base path automatically
-  const logoTexture = useTexture(skill.logo);
-
-  // Make texture look good on sphere
-  useEffect(() => {
-    if (logoTexture) {
-      logoTexture.colorSpace = THREE.SRGBColorSpace;
-      logoTexture.needsUpdate = true;
-    }
-  }, [logoTexture]);
-
-  const orbitParams = useRef({
-    speed:    Math.random() * 0.3 + 0.1,
-    radiusX:  Math.random() * 2.5 + 1.5,
-    radiusZ:  Math.random() * 2.5 + 1.5,
-    offset:   Math.random() * Math.PI * 2,
-    yBase:    (Math.random() - 0.5) * 3,
-    yAmp:     Math.random() * 0.6 + 0.2,
-    rotSpeed: (Math.random() - 0.5) * 0.02,
-  });
-
-  useFrame((state) => {
-    if (!meshRef.current) return;
-    const t = state.clock.getElapsedTime();
-    const p = orbitParams.current;
-
-    const tx = Math.sin(t * p.speed + p.offset) * p.radiusX;
-    const ty = p.yBase + Math.sin(t * 1.2 + p.offset) * p.yAmp;
-    const tz = Math.cos(t * p.speed + p.offset) * p.radiusZ;
-
-    const mouseX = (mouse.x * viewport.width) / 2;
-    const mouseY = (mouse.y * viewport.height) / 2;
-    const dx = meshRef.current.position.x - mouseX;
-    const dy = meshRef.current.position.y - mouseY;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    let fx = tx, fy = ty, fz = tz;
-    if (dist < 2.5 && dist > 0) {
-      const str = (2.5 - dist) * 0.8;
-      fx += (dx / dist) * str;
-      fy += (dy / dist) * str;
-    }
-
-    meshRef.current.position.x = THREE.MathUtils.lerp(meshRef.current.position.x, fx, 0.06);
-    meshRef.current.position.y = THREE.MathUtils.lerp(meshRef.current.position.y, fy, 0.06);
-    meshRef.current.position.z = THREE.MathUtils.lerp(meshRef.current.position.z, fz, 0.06);
-    meshRef.current.rotation.y += p.rotSpeed;
-    meshRef.current.rotation.x += p.rotSpeed * 0.3;
-
-    const targetScale = hovered ? 1.3 : 1;
-    meshRef.current.scale.setScalar(
-      THREE.MathUtils.lerp(meshRef.current.scale.x, targetScale, 0.12)
-    );
-  });
-
-  return (
-    <mesh
-      ref={meshRef}
-      position={initialPosition}
-      onPointerOver={(e) => { e.stopPropagation(); setHovered(true); document.body.style.cursor = 'pointer'; }}
-      onPointerOut={() => { setHovered(false); document.body.style.cursor = 'default'; }}
-    >
-      <sphereGeometry args={[size, 64, 64]} />
-      <meshStandardMaterial
-        map={logoTexture}
-        roughness={0.1}
-        metalness={0.05}
-        color="#ffffff"
-        emissive={hovered ? new THREE.Color(skill.color) : new THREE.Color('#000000')}
-        emissiveIntensity={hovered ? 0.4 : 0}
-        envMapIntensity={1.2}
-      />
-    </mesh>
-  );
-};
-
-// Glowing cursor orb
-const CursorOrb = () => {
-  const meshRef = useRef();
-  const { viewport, mouse } = useThree();
-
-  useFrame(() => {
-    if (!meshRef.current) return;
-    const tx = (mouse.x * viewport.width) / 2;
-    const ty = (mouse.y * viewport.height) / 2;
-    meshRef.current.position.x = THREE.MathUtils.lerp(meshRef.current.position.x, tx, 0.1);
-    meshRef.current.position.y = THREE.MathUtils.lerp(meshRef.current.position.y, ty, 0.1);
-  });
-
-  return (
-    <mesh ref={meshRef} position={[0, 0, 0]}>
-      <sphereGeometry args={[0.18, 32, 32]} />
-      <meshStandardMaterial color="#ff4d4d" emissive="#ff4d4d" emissiveIntensity={2} transparent opacity={0.85} />
-    </mesh>
-  );
-};
-
-// Scene wrapper — useTexture must be called inside Canvas
-const Scene = ({ initialPositions, sizes }) => {
-  return (
-    <>
-      <color attach="background" args={['#060608']} />
-      <ambientLight intensity={1.2} />
-      <directionalLight position={[5, 10, 5]} intensity={2.5} color="#ffffff" />
-      <directionalLight position={[-5, -5, -5]} intensity={0.8} color="#e0e0ff" />
-      <pointLight position={[0, 5, 0]} intensity={1.5} color="#ffffff" />
-      <pointLight position={[0, -5, 3]} intensity={0.6} color="#ff4d4d" />
-
-      {skillsList.map((skill, i) => (
-        <Sphere
-          key={skill.name}
-          skill={skill}
-          initialPosition={initialPositions[i]}
-          size={sizes[i]}
-        />
-      ))}
-
-      <CursorOrb />
-      <ContactShadows position={[0, -3.5, 0]} opacity={0.3} scale={20} blur={2.5} far={5} />
-      <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.4} />
-    </>
-  );
-};
+function makeTexture(skill) {
+  const s = 128;
+  const tc = document.createElement('canvas');
+  tc.width = s; tc.height = s;
+  const t = tc.getContext('2d');
+  const g = t.createRadialGradient(s * .45, s * .38, s * .05, s / 2, s / 2, s / 2);
+  g.addColorStop(0, 'rgba(255,255,255,0.95)');
+  g.addColorStop(0.6, 'rgba(255,255,255,0.82)');
+  g.addColorStop(1, 'rgba(220,228,240,0.6)');
+  t.beginPath(); t.arc(s / 2, s / 2, s / 2 - 1, 0, Math.PI * 2);
+  t.fillStyle = g; t.fill();
+  t.beginPath(); t.arc(s / 2, s / 2, s / 2 - 1, 0, Math.PI * 2);
+  t.strokeStyle = 'rgba(255,255,255,0.4)'; t.lineWidth = 1.5; t.stroke();
+  t.font = `bold ${s * 0.32}px monospace`;
+  t.textAlign = 'center'; t.textBaseline = 'middle';
+  t.fillStyle = skill.color;
+  t.fillText(skill.text, s / 2, s / 2 + 2);
+  return tc;
+}
 
 const Skills = () => {
-  const initialPositions = useRef(
-    skillsList.map(() => [
-      (Math.random() - 0.5) * 6,
-      (Math.random() - 0.5) * 4,
-      (Math.random() - 0.5) * 3,
-    ])
-  ).current;
+  const canvasRef = useRef(null);
+  const labelRef  = useRef(null);
 
-  const sizes = useRef(
-    skillsList.map(() => Math.random() * 0.25 + 0.42)
-  ).current;
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const label  = labelRef.current;
+    if (!canvas) return;
+
+    const W = canvas.offsetWidth;
+    const H = canvas.offsetHeight;
+    canvas.width  = W * devicePixelRatio;
+    canvas.height = H * devicePixelRatio;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(devicePixelRatio, devicePixelRatio);
+
+    const textures = skills.map(makeTexture);
+
+    const spheres = skills.map((sk, i) => {
+      const r = 45 + Math.random() * 20 ;
+      return {
+        x: 80 + Math.random() * (W - 160),
+        y: 80 + Math.random() * (H - 160),
+        vx: (Math.random() - 0.5) * 1.2,
+        vy: (Math.random() - 0.5) * 1.2,
+        r, displayR: r,
+        skill: sk, idx: i,
+        phase: Math.random() * Math.PI * 2,
+        hovered: false,
+      };
+    });
+
+    let mx = -999, my = -999;
+    let rafId;
+
+    const onMove = (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mx = e.clientX - rect.left;
+      my = e.clientY - rect.top;
+      if (label) {
+        label.style.left = (mx + 12) + 'px';
+        label.style.top  = (my - 18) + 'px';
+      }
+    };
+    const onLeave = () => { mx = -999; my = -999; if (label) label.style.opacity = 0; };
+
+    canvas.addEventListener('mousemove', onMove);
+    canvas.addEventListener('mouseleave', onLeave);
+
+    let last = 0;
+    const loop = (ts) => {
+      const dt = Math.min((ts - last) / 16, 3); last = ts;
+      ctx.clearRect(0, 0, W, H);
+
+      let hoveredSphere = null;
+      for (const sp of spheres) {
+        const dx = mx - sp.x, dy = my - sp.y;
+        sp.hovered = Math.sqrt(dx * dx + dy * dy) < sp.r * 1.1;
+        if (sp.hovered) hoveredSphere = sp;
+      }
+
+      if (label) {
+        label.style.opacity   = hoveredSphere ? '1' : '0';
+        if (hoveredSphere) label.textContent = hoveredSphere.skill.name;
+      }
+
+      for (const sp of spheres) {
+        sp.phase += 0.012;
+        const bobY     = Math.sin(sp.phase) * 0.4;
+        const targetR  = sp.hovered ? sp.r * 1.18 : sp.r;
+        sp.displayR    = sp.displayR + (targetR - sp.displayR) * 0.15;
+
+        const dx = mx - sp.x, dy = my - sp.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const repel = 120;
+        if (dist < repel && dist > 0) {
+          const force = (repel - dist) / repel * 3.5;
+          sp.vx -= (dx / dist) * force * 0.08;
+          sp.vy -= (dy / dist) * force * 0.08;
+        }
+
+        sp.vx *= 0.97; sp.vy *= 0.97;
+        sp.x  += sp.vx;
+        sp.y  += sp.vy + bobY;
+
+        if (sp.x - sp.displayR < 0)  { sp.x = sp.displayR;      sp.vx =  Math.abs(sp.vx) * 0.7; }
+        if (sp.x + sp.displayR > W)  { sp.x = W - sp.displayR;  sp.vx = -Math.abs(sp.vx) * 0.7; }
+        if (sp.y - sp.displayR < 0)  { sp.y = sp.displayR;      sp.vy =  Math.abs(sp.vy) * 0.7; }
+        if (sp.y + sp.displayR > H)  { sp.y = H - sp.displayR;  sp.vy = -Math.abs(sp.vy) * 0.7; }
+
+        for (const sp2 of spheres) {
+          if (sp2 === sp) continue;
+          const ex = sp.x - sp2.x, ey = sp.y - sp2.y;
+          const ed = Math.sqrt(ex * ex + ey * ey);
+          const minD = sp.r + sp2.r + 4;
+          if (ed < minD && ed > 0) {
+            const push = (minD - ed) / minD * 1.8;
+            sp.vx += (ex / ed) * push * 0.3;
+            sp.vy += (ey / ed) * push * 0.3;
+          }
+        }
+      }
+
+      const sorted = [...spheres].sort((a, b) => a.r - b.r);
+      for (const sp of sorted) {
+        const dr = sp.displayR;
+        ctx.save();
+        ctx.translate(sp.x, sp.y);
+
+        if (sp.hovered) {
+          ctx.beginPath(); ctx.arc(0, 0, dr + 8, 0, Math.PI * 2);
+          const gl = ctx.createRadialGradient(0, 0, dr, 0, 0, dr + 10);
+          gl.addColorStop(0, sp.skill.color + '60');
+          gl.addColorStop(1, 'transparent');
+          ctx.fillStyle = gl; ctx.fill();
+        }
+
+        ctx.beginPath(); ctx.arc(0, 0, dr, 0, Math.PI * 2);
+        ctx.shadowColor = sp.skill.color + '40';
+        ctx.shadowBlur  = sp.hovered ? 18 : 6;
+        ctx.drawImage(textures[sp.idx], -dr, -dr, dr * 2, dr * 2);
+
+        if (sp.hovered) {
+          ctx.beginPath(); ctx.arc(0, 0, dr, 0, Math.PI * 2);
+          ctx.strokeStyle = sp.skill.color + '99';
+          ctx.lineWidth   = 2; ctx.stroke();
+        }
+
+        ctx.restore();
+      }
+
+      ctx.shadowBlur = 0;
+
+      // red cursor orb
+      if (mx > 0) {
+        const cg = ctx.createRadialGradient(mx, my, 0, mx, my, 12);
+        cg.addColorStop(0, 'rgba(255,80,80,1)');
+        cg.addColorStop(1, 'rgba(255,80,80,0)');
+        ctx.beginPath(); ctx.arc(mx, my, 6, 0, Math.PI * 2);
+        ctx.fillStyle = cg; ctx.fill();
+      }
+
+      rafId = requestAnimationFrame(loop);
+    };
+
+    rafId = requestAnimationFrame(loop);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      canvas.removeEventListener('mousemove', onMove);
+      canvas.removeEventListener('mouseleave', onLeave);
+    };
+  }, []);
 
   return (
     <section id="skills" className="py-24 bg-background relative overflow-hidden">
@@ -165,16 +196,26 @@ const Skills = () => {
           My Tech <span className="text-primary">Stack</span>
         </h2>
 
-        <div className="w-full h-[65vh] rounded-3xl overflow-hidden border border-white/5 bg-[#060608] mb-16 relative">
-          <Canvas
-            camera={{ position: [0, 0, 9], fov: 50 }}
-            gl={{ antialias: true, alpha: false }}
-          >
-            <Scene initialPositions={initialPositions} sizes={sizes} />
-          </Canvas>
-
+        <div className="w-full h-[65vh] rounded-3xl overflow-hidden border border-white/5 bg-[#07080f] mb-16 relative" style={{ cursor: 'none' }}>
+          <canvas
+            ref={canvasRef}
+            style={{ width: '100%', height: '100%', display: 'block' }}
+          />
+          <div
+            ref={labelRef}
+            style={{
+              position: 'absolute', top: 0, left: 0,
+              pointerEvents: 'none', opacity: 0,
+              transition: 'opacity 0.2s',
+              background: 'rgba(255,255,255,0.08)',
+              backdropFilter: 'blur(8px)',
+              border: '1px solid rgba(255,255,255,0.15)',
+              color: '#fff', fontFamily: 'monospace', fontSize: '13px',
+              padding: '6px 14px', borderRadius: '20px', whiteSpace: 'nowrap',
+            }}
+          />
           <div className="absolute bottom-4 right-4 text-xs text-gray-500 font-mono flex items-center gap-2 pointer-events-none">
-            <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
             INTERACTIVE 3D SPACE
           </div>
           <div className="absolute top-4 left-4 text-xs text-gray-400 font-mono pointer-events-none">
@@ -182,7 +223,7 @@ const Skills = () => {
           </div>
         </div>
 
-        {/* Flat Skill Pills */}
+        {/* Skill Pills */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {[
             { title: 'Frontend',  items: ['HTML5', 'CSS3', 'JavaScript', 'React', 'Responsive Design'] },
@@ -194,7 +235,10 @@ const Skills = () => {
               <h4 className="text-xl font-syne font-bold mb-4 text-white">{title}</h4>
               <div className="flex flex-wrap gap-2">
                 {items.map(s => (
-                  <span key={s} className="px-4 py-2 bg-white/5 rounded-full text-sm font-medium text-gray-300 border border-white/10 hover:border-primary/50 transition-colors cursor-default">
+                  <span
+                    key={s}
+                    className="px-4 py-2 bg-white/5 rounded-full text-sm font-medium text-gray-300 border border-white/10 hover:border-primary/50 transition-colors cursor-default"
+                  >
                     {s}
                   </span>
                 ))}

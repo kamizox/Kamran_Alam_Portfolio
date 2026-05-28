@@ -50,13 +50,13 @@ const Contact = () => {
             <div className="mb-10">
               <div className="text-sm text-gray-500 font-mono mb-4">Follow Me</div>
               <div className="flex gap-4">
-                <a href="#instagram" className="w-12 h-12 rounded-full bg-background border border-white/10 flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary hover:glow-shadow transition-all">
+                <a href="https://www.instagram.com/kami0368/" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full bg-background border border-white/10 flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary hover:glow-shadow transition-all">
                   <Instagram size={20} />
                 </a>
-                <a href="#github" className="w-12 h-12 rounded-full bg-background border border-white/10 flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary hover:glow-shadow transition-all">
+                <a href="https://github.com/kamizox" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full bg-background border border-white/10 flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary hover:glow-shadow transition-all">
                   <Github size={20} />
                 </a>
-                <a href="#linkedin" className="w-12 h-12 rounded-full bg-background border border-white/10 flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary hover:glow-shadow transition-all">
+                <a href="https://www.linkedin.com/in/kamran-alam-6023bb225/" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-full bg-background border border-white/10 flex items-center justify-center text-gray-400 hover:text-primary hover:border-primary hover:glow-shadow transition-all">
                   <Linkedin size={20} />
                 </a>
               </div>
@@ -120,7 +120,7 @@ const Contact = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          <a href="/Kamran_Alam_CV.pdf" download className="group relative inline-flex items-center justify-center px-12 py-5 text-xl font-bold text-white bg-transparent border-2 border-primary rounded-full overflow-hidden transition-all hover:scale-105">
+          <a href="Kamran_Alam_CV.pdf" download="Kamran_Alam_CV.pdf" className="group relative inline-flex items-center justify-center px-12 py-5 text-xl font-bold text-white bg-transparent border-2 border-primary rounded-full overflow-hidden transition-all hover:scale-105">
             <span className="absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-black"></span>
             <span className="absolute inset-0 w-full h-full border-2 border-primary rounded-full"></span>
             <div className="absolute inset-0 bg-primary translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0"></div>

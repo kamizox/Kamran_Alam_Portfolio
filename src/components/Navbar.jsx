@@ -46,17 +46,17 @@ const Navbar = () => {
         {/* Right Side (Socials + Resume) */}
         <div className="hidden md:flex items-center space-x-6">
           <div className="flex space-x-4">
-            <a href="#instagram" className="text-gray-400 hover:text-primary hover:glow-shadow transition-all rounded-full p-2">
+            <a href="https://www.instagram.com/kami0368/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary hover:glow-shadow transition-all rounded-full p-2">
               <Instagram size={20} />
             </a>
-            <a href="#github" className="text-gray-400 hover:text-primary hover:glow-shadow transition-all rounded-full p-2">
+            <a href="https://github.com/kamizox" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary hover:glow-shadow transition-all rounded-full p-2">
               <Github size={20} />
             </a>
-            <a href="#linkedin" className="text-gray-400 hover:text-primary hover:glow-shadow transition-all rounded-full p-2">
+            <a href="https://www.linkedin.com/in/kamran-alam-6023bb225/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-primary hover:glow-shadow transition-all rounded-full p-2">
               <Linkedin size={20} />
             </a>
           </div>
-          <a href="/Kamran_Alam_CV.pdf" download className="border border-primary text-primary px-6 py-2 rounded-full font-medium hover:bg-primary hover:text-white transition-all glow-shadow">
+          <a href="Kamran_Alam_CV.pdf" download="Kamran_Alam_CV.pdf" className="border border-primary text-primary px-6 py-2 rounded-full font-medium hover:bg-primary hover:text-white transition-all glow-shadow">
             Download CV
           </a>
         </div>
@@ -89,7 +89,7 @@ const Navbar = () => {
                 {link.name}
               </a>
             ))}
-            <a href="/Kamran_Alam_CV.pdf" download className="mt-8 border border-primary text-primary px-8 py-3 rounded-full font-medium hover:bg-primary hover:text-white transition-all">
+            <a href="Kamran_Alam_CV.pdf" download="Kamran_Alam_CV.pdf" className="mt-8 border border-primary text-primary px-8 py-3 rounded-full font-medium hover:bg-primary hover:text-white transition-all">
               Download CV
             </a>
           </motion.div>
