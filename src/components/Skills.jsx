@@ -15,6 +15,8 @@ const skills = [
   { name: 'Python',     color: '#1e466e', text: 'Py' },
 ];
 
+
+
 function makeTexture(skill) {
   const s = 128;
   const tc = document.createElement('canvas');
