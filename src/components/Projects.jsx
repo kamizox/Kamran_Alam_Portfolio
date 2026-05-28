@@ -8,7 +8,7 @@ const projectsData = [
     image: "project_img/library.png",
     technologies: ["React", "Firebase", "Cloudinary"],
     description: "A comprehensive and modern Library Management System featuring dynamic book filtering, availability status tracking (Available/Borrowed), and a clean administrative dashboard interface.",
-    liveLink: "https://kamizox.github.io/",
+    liveLink: "https://kamizox.github.io/Re_Engineering_OF_Library_Management/",
     githubLink: "https://github.com/kamizox/Re_Engineering_OF_Library_Management"
   },
   {
